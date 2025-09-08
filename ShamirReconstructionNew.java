@@ -1,13 +1,15 @@
 import com.google.gson.*;
 import java.io.*;
 import java.nio.file.*;
+import java.math.BigInteger;
 import java.util.*;
 
 public class ShamirReconstructionNew {
 
-    // Convert value string in a given base to decimal
+    // Convert value string in a given base to decimal (supports bases > 10 and large numbers)
     private static double convertToDecimal(String value, int base) {
-        return (double) Integer.parseInt(value, base);
+        BigInteger bi = new BigInteger(value, base);
+        return bi.doubleValue();
     }
 
     private static double reconstructC(List<double[]> points) {
@@ -41,7 +43,7 @@ public class ShamirReconstructionNew {
     }
 
     public static void main(String[] args) throws Exception {
-        String jsonPath = "shares_new.json"; // your new input file
+        String jsonPath = "shares_new.json"; // your input file
         String content = new String(Files.readAllBytes(Paths.get(jsonPath)));
         JsonObject obj = JsonParser.parseString(content).getAsJsonObject();
 
@@ -65,6 +67,7 @@ public class ShamirReconstructionNew {
 
         combination(pts, indices, 0, new int[k], 0, cCandidates);
 
+        // Find most frequent rounded value
         Map<Long, Integer> countMap = new HashMap<>();
         for (double val : cCandidates) {
             long r = Math.round(val);
@@ -72,7 +75,7 @@ public class ShamirReconstructionNew {
         }
         long finalC = countMap.entrySet().stream().max(Map.Entry.comparingByValue()).get().getKey();
 
-        // Print only final secret
+        // Print only the final secret
         System.out.println(finalC);
     }
 }
