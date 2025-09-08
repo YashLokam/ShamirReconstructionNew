@@ -6,7 +6,7 @@ import java.util.*;
 
 public class ShamirReconstructionNew {
 
-    // Convert value string in a given base to decimal (supports bases > 10 and large numbers)
+    
     private static double convertToDecimal(String value, int base) {
         BigInteger bi = new BigInteger(value, base);
         return bi.doubleValue();
@@ -67,7 +67,7 @@ public class ShamirReconstructionNew {
 
         combination(pts, indices, 0, new int[k], 0, cCandidates);
 
-        // Find most frequent rounded value
+        
         Map<Long, Integer> countMap = new HashMap<>();
         for (double val : cCandidates) {
             long r = Math.round(val);
@@ -75,7 +75,6 @@ public class ShamirReconstructionNew {
         }
         long finalC = countMap.entrySet().stream().max(Map.Entry.comparingByValue()).get().getKey();
 
-        // Print only the final secret
         System.out.println(finalC);
     }
 }
